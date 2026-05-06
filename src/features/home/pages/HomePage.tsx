@@ -1,7 +1,8 @@
 import Navbar from '@/shared/components/Navbar';
 import { Link } from 'react-router-dom';
 
-const HomePage = () => {
+const HomePage =  () => {
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-50/30 font-sans">
       <Navbar />
