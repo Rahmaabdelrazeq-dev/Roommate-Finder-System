@@ -1,4 +1,3 @@
-import React from 'react';
 import Navbar from '@/shared/components/Navbar';
 import { Link } from 'react-router-dom';
 
@@ -19,9 +18,6 @@ const HomePage = () => {
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <Link to="/signup" className="px-8 py-4 bg-[#2d2d2d] text-white text-lg font-bold rounded-xl hover:bg-[#1a1a1a] transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full sm:w-auto text-center">
             Get Started
-          </Link>
-          <Link to="/login" className="px-8 py-4 bg-white text-[#2d2d2d] border-2 border-blue-100 text-lg font-bold rounded-xl hover:bg-blue-50 hover:border-blue-200 transition-all shadow-sm hover:shadow w-full sm:w-auto text-center">
-            Log In
           </Link>
         </div>
       </div>
