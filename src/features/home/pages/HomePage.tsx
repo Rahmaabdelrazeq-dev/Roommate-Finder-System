@@ -1,10 +1,8 @@
-import Navbar from '@/shared/components/Navbar';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-50/30 font-sans">
-      <Navbar />
+    <div className="h-full w-full bg-gradient-to-b from-blue-50 via-white to-blue-50/30 font-sans">
       
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-6 py-20 lg:py-32 flex flex-col items-center text-center">
