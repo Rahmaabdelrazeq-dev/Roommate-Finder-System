@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import FilterMenu from './Filters';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 import { Search, SlidersHorizontal, MapPin, Banknote } from 'lucide-react';
+import { useFilters } from '@/shared/context/FilterContext';
 
 const Navbar = () => {
-  const [filters, setFilters] = useState({ location: '', minPrice: '', maxPrice: '' });
+  const { filters, updateFilter } = useFilters();
   const [showFilters, setShowFilters] = useState(false);
-
-  const updateFilter = (key: string, value: any) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
+  const navigate = useNavigate();
 
   const toggleFilters = () => setShowFilters((prev) => !prev);
+
+  const handleSearch = () => {
+    navigate('/search');
+  };
+
+
 
   return (
     <nav className="w-full border-b border-gray-100 bg-white/95 backdrop-blur-md sticky top-0 z-50">
@@ -43,6 +47,7 @@ const Navbar = () => {
                 type="text"
                 value={filters?.location}
                 onChange={(e) => updateFilter('location', e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 placeholder="City, area..."
                 className="bg-transparent border-none focus:ring-0 p-0 text-sm font-bold text-[#2d2d2d] placeholder-gray-300 outline-none w-full"
               />
@@ -60,6 +65,7 @@ const Navbar = () => {
                   placeholder="Min"
                   className="bg-transparent border-none focus:ring-0 p-0 text-xs font-bold text-[#2d2d2d] placeholder-gray-300 outline-none w-12"
                   onChange={(e) => updateFilter('minPrice', Number(e.target.value))}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 />
                 <span className="text-gray-300 text-xs">-</span>
                 <input
@@ -67,6 +73,7 @@ const Navbar = () => {
                   placeholder="Max"
                   className="bg-transparent border-none focus:ring-0 p-0 text-xs font-bold text-[#2d2d2d] placeholder-gray-300 outline-none w-12"
                   onChange={(e) => updateFilter('maxPrice', Number(e.target.value))}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 />
               </div>
             </div>
@@ -74,9 +81,13 @@ const Navbar = () => {
 
           {/* 3. Search Action & More Filters */}
           <div className="flex items-center gap-3 pl-4 pr-3 py-2">
-             <button className="p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all shadow-blue-200 shadow-lg hover:scale-105 active:scale-95">
+             <button 
+               onClick={handleSearch}
+               className="p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all shadow-blue-200 shadow-lg hover:scale-105 active:scale-95"
+             >
                 <Search size={18} strokeWidth={3} />
              </button>
+
              
              <button 
                onClick={toggleFilters} 
