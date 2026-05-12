@@ -1,9 +1,12 @@
 import { AppRouter } from './routes';
+import { FilterProvider } from './shared/context/FilterContext';
 
 function App() {
   return (
     <div className="app-container">
-      <AppRouter />
+      <FilterProvider>
+        <AppRouter />
+      </FilterProvider>
     </div>
   );
 }

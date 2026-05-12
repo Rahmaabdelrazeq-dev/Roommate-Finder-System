@@ -2,6 +2,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import SignupPage from '@/features/auth/pages/SignupPage';
 import LoginPage from '@/features/auth/pages/LoginPage';
 import HomePage from '@/features/home/pages/HomePage';
+import SearchPage from '@/features/home/pages/SearchPage';
+import Layout from '@/shared/components/Layout';
 
 const router = createBrowserRouter([
   {
@@ -14,9 +16,20 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <HomePage />,
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+      {
+        path: 'search',
+        element: <SearchPage />,
+      }
+    ]
   }
 ]);
+
 
 export const AppRouter = () => {
   return <RouterProvider router={router} />;
