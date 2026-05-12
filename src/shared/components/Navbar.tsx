@@ -39,6 +39,7 @@ const Navbar = () => {
             Sign up
           </Link>
         </div>
+        
       </div>
 
       {/* Lower Row: Search and Filters */}
