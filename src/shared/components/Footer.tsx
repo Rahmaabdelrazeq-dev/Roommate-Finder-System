@@ -1,4 +1,3 @@
-import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ArrowUpRight } from 'lucide-react';
 
@@ -71,7 +70,9 @@ const Footer = () => {
           
           {/* Brand Info */}
           <div className="lg:col-span-2 space-y-6">
-            <h2 className="text-2xl font-black text-[#2d2d2d] tracking-tighter">Roomies<span className="text-blue-600">.</span></h2>
+            <h2 className="text-3xl font-black text-[#2d2d2d] tracking-tighter" style={{ fontFamily: "'Outfit', sans-serif" }}>
+              Roomies<span className="text-blue-600">.</span>
+            </h2>
             <p className="text-gray-400 font-medium text-base leading-relaxed max-w-sm">
               Making room-finding effortless, safe, and social. We're on a mission to help everyone find their place in the world.
             </p>
@@ -79,11 +80,11 @@ const Footer = () => {
 
           {/* Links Columns */}
           <div>
-            <h4 className="text-[11px] font-black uppercase tracking-[0.15em] text-[#2d2d2d] mb-7 opacity-90">Platform</h4>
-            <ul className="space-y-3.5">
+            <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-[#2d2d2d] mb-8 opacity-80" style={{ fontFamily: "'Outfit', sans-serif" }}>Platform</h4>
+            <ul className="space-y-4">
               {footerLinks.platform.map(link => (
                 <li key={link.label}>
-                  <Link to={link.to} className="text-sm font-bold text-gray-400 hover:text-blue-600 transition-colors duration-200">
+                  <Link to={link.to} className="text-sm font-bold text-gray-400 hover:text-blue-600 transition-all duration-300">
                     {link.label}
                   </Link>
                 </li>
@@ -92,11 +93,11 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-[11px] font-black uppercase tracking-[0.15em] text-[#2d2d2d] mb-7 opacity-90">Company</h4>
-            <ul className="space-y-3.5">
+            <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-[#2d2d2d] mb-8 opacity-80" style={{ fontFamily: "'Outfit', sans-serif" }}>Company</h4>
+            <ul className="space-y-4">
               {footerLinks.company.map(link => (
                 <li key={link.label}>
-                  <Link to={link.to} className="text-sm font-bold text-gray-400 hover:text-blue-600 transition-colors duration-200">
+                  <Link to={link.to} className="text-sm font-bold text-gray-400 hover:text-blue-600 transition-all duration-300">
                     {link.label}
                   </Link>
                 </li>
@@ -105,11 +106,11 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-[11px] font-black uppercase tracking-[0.15em] text-[#2d2d2d] mb-7 opacity-90">Support</h4>
-            <ul className="space-y-3.5">
+            <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-[#2d2d2d] mb-8 opacity-80" style={{ fontFamily: "'Outfit', sans-serif" }}>Support</h4>
+            <ul className="space-y-4">
               {footerLinks.resources.map(link => (
                 <li key={link.label}>
-                  <Link to={link.to} className="text-sm font-bold text-gray-400 hover:text-blue-600 transition-colors duration-200">
+                  <Link to={link.to} className="text-sm font-bold text-gray-400 hover:text-blue-600 transition-all duration-300">
                     {link.label}
                   </Link>
                 </li>
