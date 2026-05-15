@@ -6,6 +6,7 @@ import SearchPage from '@/features/home/pages/SearchPage';
 import RoomDetailsPage from '@/features/home/pages/RoomDetailsPage';
 import FavoritesPage from '@/features/home/pages/FavoritesPage';
 import Layout from '@/shared/components/Layout';
+import  Profile  from '@/features/home/pages/Profile';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,9 @@ const router = createBrowserRouter([
       {
         path: 'favorites',
         element: <FavoritesPage />,
+      },{
+        path:'profile',
+        element:<Profile/>
       }
     ]
   }

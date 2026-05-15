@@ -2,7 +2,7 @@ import { useState } from 'react';
 import FilterMenu from './Filters';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
-import { Search, SlidersHorizontal, MapPin, Banknote, Heart } from 'lucide-react';
+import { Search, SlidersHorizontal, MapPin, Banknote, Heart, User } from 'lucide-react';
 import { useFilters } from '@/shared/context/FilterContext';
 import { useFavorites } from '@/shared/context/FavoritesContext';
 
@@ -40,7 +40,18 @@ const Navbar = () => {
               </span>
             )}
           </Link>
-
+  <Link
+    to="/profile"
+    className="p-2.5 rounded-xl hover:bg-gray-50 transition-all group"
+    title="My Profile"
+  >
+    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+      <User
+        size={20}
+        className="text-gray-500 group-hover:text-blue-600 transition-colors"
+      />
+    </div>
+  </Link>
           <div className="w-px h-6 bg-gray-100" />
 
           {/* Auth Buttons */}
