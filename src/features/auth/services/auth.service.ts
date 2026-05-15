@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient';
+import { supabase } from '@/lib/supabase';
 import type { SignupCredentials, LoginCredentials } from '../types/types';
 
 export const authService = {

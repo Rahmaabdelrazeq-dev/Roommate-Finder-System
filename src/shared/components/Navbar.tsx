@@ -2,11 +2,13 @@ import { useState } from 'react';
 import FilterMenu from './Filters';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
-import { Search, SlidersHorizontal, MapPin, Banknote } from 'lucide-react';
+import { Search, SlidersHorizontal, MapPin, Banknote, Heart } from 'lucide-react';
 import { useFilters } from '@/shared/context/FilterContext';
+import { useFavorites } from '@/shared/context/FavoritesContext';
 
 const Navbar = () => {
   const { filters, updateFilter } = useFilters();
+  const { count: favCount } = useFavorites();
   const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
 
@@ -16,38 +18,32 @@ const Navbar = () => {
     navigate('/search');
   };
 
-
-
   return (
     <nav className="w-full border-b border-gray-100 bg-white/95 backdrop-blur-md sticky top-0 z-50">
       {/* Upper Row: Logo and Auth */}
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         {/* Logo Section */}
-        <Link to="/" className="flex items-center select-none cursor-pointer group" style={{ fontFamily: "'Outfit', sans-serif" }}>
-          {/* The letter 'R' */}
-          <span className="text-[34px] font-bold tracking-[-0.04em] text-blue-600 group-hover:text-blue-700 transition-colors">
-            R
-          </span>
+        <Logo />
 
-          {/* The Custom Search-O (Magnifying Glass) */}
-          <div className="relative flex items-center justify-center w-[26px] h-[26px] mx-[1px] mt-[6px] group-hover:scale-105 transition-transform">
-            {/* Outer Circle */}
-            <div className="w-full h-full border-[5px] border-blue-600 group-hover:border-blue-700 rounded-full transition-colors"></div>
-            {/* The Magnifying Glass Handle (The 'tail') */}
-            <div 
-              className="absolute -bottom-[2px] -right-[1px] w-[8px] h-[5px] bg-blue-600 group-hover:bg-blue-700 rounded-full transition-colors" 
-              style={{ transform: 'rotate(45deg)' }}
-            ></div>
-          </div>
+        {/* Actions */}
+        <div className="flex items-center gap-4">
+          {/* Wishlist Icon */}
+          <Link
+            to="/favorites"
+            className="relative p-2.5 rounded-xl hover:bg-gray-50 transition-colors group"
+            title="My Wishlist"
+          >
+            <Heart size={20} className="text-gray-400 group-hover:text-red-500 transition-colors" />
+            {favCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center px-1 bg-red-500 text-white text-[10px] font-black rounded-full shadow-sm">
+                {favCount > 9 ? '9+' : favCount}
+              </span>
+            )}
+          </Link>
 
-          {/* The letters 'omies' */}
-          <span className="text-[34px] font-bold tracking-[-0.04em] text-blue-600 group-hover:text-blue-700 -ml-[1px] transition-colors">
-            omies
-          </span>
-        </Link>
+          <div className="w-px h-6 bg-gray-100" />
 
-        {/* Auth Buttons */}
-        <div className="flex items-center gap-6">
+          {/* Auth Buttons */}
           <Link to="/login" className="text-sm font-bold text-[#2d2d2d] hover:text-black transition-colors">
             Log in
           </Link>
@@ -55,30 +51,11 @@ const Navbar = () => {
             Sign up
           </Link>
         </div>
-        
       </div>
 
-<<<<<<< HEAD
-      {/* Lower Row: Search and Filters */}
-      <div className="max-w-7xl mx-auto px-6 pb-5">
-        <div className="flex items-center gap-2 max-w-2xl mx-auto border border-blue-200 rounded-full py-2 px-4 shadow-sm hover:shadow-md transition-shadow bg-white">
-          {/* Location Filter Button */}
-          <button className="flex items-center gap-2 px-3 border-r border-gray-200 hover:bg-blue-50 rounded-l-full py-1 transition-colors group">
-            <MapPin size={18} className="text-blue-600 group-hover:text-blue-700" />
-            <span className="text-sm font-semibold text-[#2d2d2d]">Anywhere</span>
-          </button>
-
-          {/* Search Input */}
-          <div className="flex items-center gap-3 flex-1 px-3">
-            <Search size={18} className="text-blue-400" />
-            <input 
-              type="text" 
-              placeholder="Search cities, neighborhoods, or universities..." 
-              className="w-full bg-transparent border-none focus:ring-0 text-sm placeholder:text-gray-400 text-[#2d2d2d] outline-none"
-=======
-        {/* Lower Row: The Segmented Search Pill */}
-        <div className="relative max-w-7xl mx-auto px-6 pb-5">
-          <div className="flex items-center max-w-3xl mx-auto border border-gray-200 rounded-full shadow-sm hover:shadow-md transition-all bg-white divide-x divide-gray-100">
+      {/* Lower Row: The Segmented Search Pill */}
+      <div className="relative max-w-7xl mx-auto px-6 pb-5">
+        <div className="flex items-center max-w-3xl mx-auto border border-gray-200 rounded-full shadow-sm hover:shadow-md transition-all bg-white divide-x divide-gray-100">
           
           {/* 1. Location Segment */}
           <div className="flex-[1.5] flex items-center gap-3 px-6 py-3 hover:bg-gray-50 rounded-l-full transition-colors group cursor-text">
@@ -130,7 +107,6 @@ const Navbar = () => {
                 <Search size={18} strokeWidth={3} />
              </button>
 
-             
              <button 
                onClick={toggleFilters} 
                className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all duration-300 border ${
@@ -142,21 +118,14 @@ const Navbar = () => {
                 <SlidersHorizontal size={14} className={showFilters ? 'text-blue-600' : 'text-gray-500'} />
                 <span className="text-xs font-bold">Filters</span>
              </button>
-            {/* Render sidebar filter menu */}
+
             <FilterMenu
               filters={filters}
               updateFilter={updateFilter}
               isOpen={showFilters}
               onClose={() => setShowFilters(false)}
->>>>>>> 41481d9603016144b342eb10b22ed2d340451046
             />
           </div>
-
-          {/* Filter Button */}
-          <button className="flex items-center gap-2 px-4 py-1.5 border border-blue-100 rounded-full hover:border-blue-300 hover:bg-blue-50 transition-colors bg-blue-50/50 group">
-            <SlidersHorizontal size={14} className="text-blue-600 group-hover:text-blue-800" />
-            <span className="text-xs font-bold text-blue-800">Filters</span>
-          </button>
         </div>
       </div>
     </nav>

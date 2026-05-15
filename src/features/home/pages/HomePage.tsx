@@ -1,11 +1,30 @@
+import { useState, useEffect } from 'react';
 import Navbar from '@/shared/components/Navbar';
 import { Link } from 'react-router-dom';
 import RoomCard from '../components/RoomCard';
-import { MOCK_ROOMS } from '../mockData';
+import RoomCardSkeleton from '../components/RoomCardSkeleton';
+import { roomService } from '../services/roomService';
+import type { Room } from '../types';
 
 const HomePage = () => {
-  // Only show first 3 rooms as featured
-  const featuredRooms = MOCK_ROOMS.slice(0, 3);
+  const [featuredRooms, setFeaturedRooms] = useState<Room[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadFeaturedRooms = async () => {
+      setIsLoading(true);
+      try {
+        const rooms = await roomService.fetchFeaturedRooms();
+        setFeaturedRooms(rooms);
+      } catch (error) {
+        console.error('Failed to load featured rooms:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadFeaturedRooms();
+  }, []);
 
   return (
     <div className="h-full w-full bg-gradient-to-b from-white via-blue-50/20 to-white font-sans">
@@ -77,16 +96,24 @@ const HomePage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredRooms.map((room) => (
-            <RoomCard key={room.id} room={room} />
-          ))}
+          {isLoading ? (
+            [1, 2, 3].map((i) => <RoomCardSkeleton key={i} />)
+          ) : featuredRooms.length > 0 ? (
+            featuredRooms.map((room) => (
+              <RoomCard key={room.id} room={room} />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-20 bg-white rounded-[3rem] border border-gray-100">
+               <p className="text-gray-400 font-bold">No featured rooms available right now.</p>
+               <Link to="/search" className="text-blue-600 font-black mt-4 inline-block hover:underline">Explore all listings</Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-// Simple ChevronRight for the link above if lucide isn't imported
 const ChevronRight = ({ size }: { size: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <path d="m9 18 6-6-6-6" />
@@ -94,5 +121,3 @@ const ChevronRight = ({ size }: { size: number }) => (
 );
 
 export default HomePage;
-
-

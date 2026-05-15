@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useFilters } from '@/shared/context/FilterContext';
 import RoomCard from '../components/RoomCard';
 import RoomCardSkeleton from '../components/RoomCardSkeleton';
 import EmptyState from '../components/EmptyState';
-import { MOCK_ROOMS } from '../mockData';
+import { roomService } from '../services/roomService';
 import type { Room } from '../types';
-import { Map, List, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 const SearchPage = () => {
   const { filters, clearFilters } = useFilters();
@@ -13,19 +13,23 @@ const SearchPage = () => {
   const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
 
   useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      const results = MOCK_ROOMS.filter((room) => {
-        const matchesLocation = !filters.location || room.location.toLowerCase().includes(filters.location.toLowerCase());
-        const matchesMinPrice = filters.minPrice === '' || room.price >= Number(filters.minPrice);
-        const matchesMaxPrice = filters.maxPrice === '' || room.price <= Number(filters.maxPrice);
-        return matchesLocation && matchesMinPrice && matchesMaxPrice;
-      });
-      setFilteredRooms(results);
-      setIsLoading(false);
-    }, 600);
+    const fetchFilteredRooms = async () => {
+      setIsLoading(true);
+      try {
+        const rooms = await roomService.fetchRooms({
+          location: filters.location,
+          minPrice: filters.minPrice,
+          maxPrice: filters.maxPrice
+        });
+        setFilteredRooms(rooms);
+      } catch (error) {
+        console.error('Failed to fetch rooms:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    fetchFilteredRooms();
   }, [filters]);
 
   return (
@@ -48,17 +52,6 @@ const SearchPage = () => {
             <p className="text-gray-500 font-medium">
               {isLoading ? 'Finding the best matches...' : `Showing ${filteredRooms.length} high-quality results`}
             </p>
-          </div>
-
-          <div className="flex items-center gap-3 bg-white p-1.5 rounded-2xl border border-gray-100 shadow-sm">
-            <button className="flex items-center gap-2 px-4 py-2 bg-[#2d2d2d] text-white rounded-xl text-xs font-bold transition-all shadow-md">
-              <List size={14} />
-              List
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 text-gray-500 hover:bg-gray-50 rounded-xl text-xs font-bold transition-all">
-              <Map size={14} />
-              Map view
-            </button>
           </div>
         </div>
 

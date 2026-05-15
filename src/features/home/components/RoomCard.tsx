@@ -1,14 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MapPin, Shield, Star, Heart } from 'lucide-react';
 import type { Room } from '../types';
+import { useFavorites } from '@/shared/context/FavoritesContext';
 
 interface RoomCardProps {
   room: Room;
 }
 
 const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorited = isFavorite(room.id);
+
   return (
-    <div className="group bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 relative">
+    <Link to={`/rooms/${room.id}`} className="block group bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 relative">
       {/* Image Container */}
       <div className="relative h-64 overflow-hidden">
         <img 
@@ -32,15 +37,22 @@ const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
         </div>
 
         {/* Favorite Button */}
-        <button className="absolute top-4 right-4 p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white hover:bg-white hover:text-red-500 transition-all duration-300 group/fav">
-          <Heart size={20} className="transition-transform group-active/fav:scale-75" />
+        <button
+          onClick={(e) => { e.preventDefault(); toggleFavorite(room.id); }}
+          className={`absolute top-4 right-4 p-3 backdrop-blur-md rounded-2xl border transition-all duration-300 group/fav ${
+            favorited
+              ? 'bg-red-500 border-red-400 text-white'
+              : 'bg-white/10 border-white/20 text-white hover:bg-white hover:text-red-500'
+          }`}
+        >
+          <Heart size={20} className={`transition-transform group-active/fav:scale-75 ${favorited ? 'fill-white' : ''}`} />
         </button>
 
         {/* Price Tag */}
         <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
            <div className="flex flex-col">
               <span className="text-white font-black text-2xl leading-none">
-                ${room.price.toLocaleString()}
+                {room.currency === 'USD' ? '$' : room.currency} {room.price.toLocaleString()}
                 <span className="text-white/70 text-sm font-medium ml-1">/ month</span>
               </span>
            </div>
@@ -59,7 +71,9 @@ const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
           <div className="p-1.5 bg-gray-50 rounded-lg">
             <MapPin size={16} className="text-blue-500" />
           </div>
-          <span className="text-sm font-bold text-gray-600">{room.location}</span>
+          <span className="text-sm font-bold text-gray-600">
+            {room.city}{room.area ? `, ${room.area}` : ''}
+          </span>
           <span className="w-1 h-1 rounded-full bg-gray-300" />
           <span className="text-sm font-medium text-gray-400">{room.distance}</span>
         </div>
@@ -90,12 +104,12 @@ const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
             </div>
           </div>
           
-          <button className="px-5 py-2.5 bg-[#f8f9fa] hover:bg-[#2d2d2d] text-[#2d2d2d] hover:text-white rounded-xl text-xs font-black transition-all duration-300 border border-transparent hover:shadow-lg">
+          <span className="px-5 py-2.5 bg-[#f8f9fa] group-hover:bg-[#2d2d2d] text-[#2d2d2d] group-hover:text-white rounded-xl text-xs font-black transition-all duration-300 border border-transparent group-hover:shadow-lg">
             View Details
-          </button>
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

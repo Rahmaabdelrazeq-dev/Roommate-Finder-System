@@ -19,7 +19,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ onClearFilters }) => {
       </div>
 
       <h3 className="text-3xl font-black text-[#2d2d2d] mb-4 tracking-tight">
-        No rooms found
+        No Listings Found
       </h3>
       
       <p className="text-gray-500 max-w-md mb-12 text-lg font-medium leading-relaxed">
@@ -31,7 +31,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ onClearFilters }) => {
         className="group flex items-center gap-3 bg-[#1a1a1a] text-white px-8 py-4 rounded-2xl font-black text-sm hover:bg-black transition-all duration-300 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_50px_-10px_rgba(0,0,0,0.4)] active:scale-95"
       >
         <RotateCcw size={18} className="group-hover:rotate-180 transition-transform duration-500" />
-        Clear All Filters
+        Reset Filters
       </button>
     </div>
   );

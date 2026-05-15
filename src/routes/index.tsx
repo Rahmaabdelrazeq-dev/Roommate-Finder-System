@@ -3,6 +3,8 @@ import SignupPage from '@/features/auth/pages/SignupPage';
 import LoginPage from '@/features/auth/pages/LoginPage';
 import HomePage from '@/features/home/pages/HomePage';
 import SearchPage from '@/features/home/pages/SearchPage';
+import RoomDetailsPage from '@/features/home/pages/RoomDetailsPage';
+import FavoritesPage from '@/features/home/pages/FavoritesPage';
 import Layout from '@/shared/components/Layout';
 
 const router = createBrowserRouter([
@@ -25,6 +27,14 @@ const router = createBrowserRouter([
       {
         path: 'search',
         element: <SearchPage />,
+      },
+      {
+        path: 'rooms/:id',
+        element: <RoomDetailsPage />,
+      },
+      {
+        path: 'favorites',
+        element: <FavoritesPage />,
       }
     ]
   }
