@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 import FilterMenu from './Filters';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
@@ -10,7 +11,39 @@ const Navbar = () => {
   const { filters, updateFilter } = useFilters();
   const { count: favCount } = useFavorites();
   const [showFilters, setShowFilters] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [profile, setProfile] = useState<any>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfile = async (userId: string) => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('avatar_url, full_name')
+        .eq('id', userId)
+        .maybeSingle();
+      setProfile(data);
+    };
+
+    // Check initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) fetchProfile(session.user.id);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      if (currentUser) {
+        fetchProfile(currentUser.id);
+      } else {
+        setProfile(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const toggleFilters = () => setShowFilters((prev) => !prev);
 
@@ -26,41 +59,64 @@ const Navbar = () => {
         <Logo />
 
         {/* Actions */}
-        <div className="flex items-center gap-4">
-          {/* Wishlist Icon */}
-          <Link
-            to="/favorites"
-            className="relative p-2.5 rounded-xl hover:bg-gray-50 transition-colors group"
-            title="My Wishlist"
-          >
-            <Heart size={20} className="text-gray-400 group-hover:text-red-500 transition-colors" />
-            {favCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center px-1 bg-red-500 text-white text-[10px] font-black rounded-full shadow-sm">
-                {favCount > 9 ? '9+' : favCount}
-              </span>
-            )}
-          </Link>
-  <Link
-    to="/profile"
-    className="p-2.5 rounded-xl hover:bg-gray-50 transition-all group"
-    title="My Profile"
-  >
-    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
-      <User
-        size={20}
-        className="text-gray-500 group-hover:text-blue-600 transition-colors"
-      />
-    </div>
-  </Link>
-          <div className="w-px h-6 bg-gray-100" />
+        <div className="flex items-center gap-2">
+          {user ? (
+            <>
+              {/* My Profile Avatar */}
+              <Link
+                to="/profile"
+                className="p-0.5 rounded-full hover:bg-gray-50 transition-all group flex items-center border border-transparent hover:border-gray-200"
+                title="My Profile"
+              >
+                <div className="w-10 h-10 rounded-full border border-gray-100 overflow-hidden group-hover:border-blue-200 transition-colors">
+                  <img
+                    src={
+                      profile?.avatar_url ||
+                      `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.full_name || user.email || 'User')}&background=eff6ff&color=3b82f6&bold=true`
+                    }
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.full_name || 'User')}&background=eff6ff&color=3b82f6&bold=true`;
+                    }}
+                  />
+                </div>
+              </Link>
 
-          {/* Auth Buttons */}
-          <Link to="/login" className="text-sm font-bold text-[#2d2d2d] hover:text-black transition-colors">
-            Log in
-          </Link>
-          <Link to="/signup" className="bg-[#2d2d2d] text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-[#1a1a1a] transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-            Sign up
-          </Link>
+              {/* Wishlist Icon */}
+              <Link
+                to="/favorites"
+                className="relative p-2.5 rounded-full hover:bg-gray-50 transition-colors group"
+                title="My Wishlist"
+              >
+                <Heart size={22} className="text-gray-400 group-hover:text-red-500 transition-colors" />
+                {favCount > 0 && (
+                  <span className="absolute top-1 right-1 min-w-[18px] h-[18px] flex items-center justify-center px-1 bg-red-600 text-white text-[9px] font-bold rounded-full shadow-sm border-2 border-white">
+                    {favCount > 9 ? '9+' : favCount}
+                  </span>
+                )}
+              </Link>
+
+              <div className="w-px h-6 bg-gray-100 mx-2" />
+              
+              <button 
+                onClick={() => supabase.auth.signOut().then(() => navigate('/'))}
+                className="text-sm font-bold text-gray-500 hover:text-red-500 transition-colors px-2"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              {/* Auth Buttons */}
+              <Link to="/login" className="text-sm font-bold text-[#2d2d2d] hover:text-black transition-colors px-2">
+                Log in
+              </Link>
+              <Link to="/signup" className="bg-[#2d2d2d] text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-[#1a1a1a] transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ml-2">
+                Sign up
+              </Link>
+            </>
+          )}
         </div>
       </div>
 

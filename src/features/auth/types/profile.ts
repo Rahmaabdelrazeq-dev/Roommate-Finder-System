@@ -4,4 +4,5 @@ export type ProfileType = {
   age: number;
   avatar_url: string;
   created_at: string;
+  email?: string; // Derived from auth user
 };
